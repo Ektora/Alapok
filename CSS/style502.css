@@ -1,0 +1,26 @@
+body{
+
+}
+ul{
+    list-style-type: square; /* felsorolásjel */
+    font-size: 4em; /* Amekkora az adott pontban lenne a betű, ahoz képest relatív érték*/
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: bold;
+    background-color: ghostwhite;
+    overflow: hidden; /*Ha a tartalom nagyobb, mint az ul elem, akkor nem látszik, ami túllóg*/
+    height: 0.8em;
+    border-bottom: 1px solid red;
+}
+li{
+    display: inline; /* Több elem megjelenik egy sorban, de nincs magassága*/
+    display: inline-block; /* Több elem egy sorban, de már magassággal*/
+    color: cornflowerblue;
+    padding-left: 1em;
+    vertical-align: bottom;
+    margin-top: -0.8em; /* Negatív értéknél felcsúsztatja*/
+    cursor: cell;
+}
+li:hover{
+    color:gold;
+    margin-bottom: 0.2em;
+}
