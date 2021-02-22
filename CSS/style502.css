@@ -24,3 +24,9 @@ li:hover{
     color:gold;
     margin-bottom: 0.2em;
 }
+th{
+    background-color: grey;
+}
+tr:nth-child(even){ /* Minden második, páros elem */
+    background-color: lightblue;
+}
