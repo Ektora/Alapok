@@ -82,3 +82,9 @@ legend + .note{
     display: block;
     margin-top: -1em;
 }
+input:focus{
+    background-color: yellow;
+}
+input:invalid{
+    background-color: orangered;
+}

@@ -85,10 +85,16 @@
             <legend>Jelentkezési adatok</legend>
             <div class="note">Mégsem ön ...</div>
             <div>
-                <label>Nevem</label><input name="nev" type="text">
+                <!-- for: a label a nev id beviteli mezőhőz tartozik. Haszna: ha rákkatintot a Nevem szövegre, focusba kerül az input mező
+                required attribútum a mező kitöltése kötelező-->
+                <label for="nev">Nevem</label>
+                <input name="nev" type="text" id="nev" required>
             </div>
             <div>
-                <label>Telefon</label><input name="telefon" type="text">
+                <label>Telefon</label>
+                <!-- Pattern/regex/ : mintát lehet megadni, ^ a string így kezdődik, \d számok {hány darab} $ sztring vége
+                title: tooltipet lehet vele megadni-->
+                <input name="telefon" type="text" title="111-1234 formátum kell" pattern="^\d{3}-\d{4}$">
             </div>
         </fieldset>
         <fieldset>
@@ -99,7 +105,9 @@
             <div> 
                 <label>Város</label><input name="varos" type="text">
             </div>
+            
         </fieldset>
+        <button>Ok</button>
     </form>
 </body>
 

@@ -1,20 +1,17 @@
-const http = require('http');
-const url = require('url');
-const port = 1337;
-const host = 'localhost';
- 
-const server = http.createServer(function (req, res) {
-    const parsedURL = url.parse(req.url, true);
-    if (parsedURL.pathname == '/echo' && parsedURL.query.message) {
-        res.statusCode = 200;
-        res.setHeader('Cache-control', 'no-cache');
-        res.end(parsedURL.query.message);
+var http = require('http');
+var url = require('url');
+var fs = require('fs');
+
+http.createServer(function (req, res) {
+  res.writeHead(200, {'Content-Type': 'text/html'});
+  var q = url.parse(req.url, true).query;
+  fs.readFile('index502.html', null, function (error, data) {
+    if (error) {
+        res.writeHead(404);
+        res.write('Whoops! File not found!');
     } else {
-        res.statusCode = 404;
-        res.end("Page not found");
+        res.write("<h2>Sikerült a tesztünk</h2>");
     }
+    res.end();
 });
- 
-server.listen(port, host, function () {
-    console.log('Web server is running on port 1337');
-});
+}).listen(8081);
