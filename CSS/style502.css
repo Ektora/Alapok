@@ -30,3 +30,55 @@ th{
 tr:nth-child(even){ /* Minden második, páros elem */
     background-color: lightblue;
 }
+
+/* Táblázatos elrendezés a form-nak*/
+form{
+    display: table;
+    border-spacing: 0.3em;
+}
+
+fieldset{
+    border: 0px;
+    background-color: #d6d6d6;
+    padding: 0.5em;
+    padding-top: 2em;
+    color: #515151;
+}
+
+fieldset:nth-child(odd){
+    background-color: #cacaca;
+}
+
+legend{
+    padding: 0;
+    margin-top: -1.7em;
+    font-weight: bold;
+    position: absolute;
+    color: #515151;
+}
+/* a fieldset leszármazott div-jei kivéve a .note*/
+fieldset>div:not(.note){
+    padding-top: 1em;
+    display: table-row;
+}
+fieldset>div:not(.note)>*{
+    display: table-cell;
+    vertical-align: middle;
+}
+/* a tartalom után betesz egy kettőspontot */
+label:after{
+    content: ":";
+}
+.note{
+    font-size: 0.7em;
+    padding-top: 0;
+    padding-bottom: 1em;
+}
+.note p{
+    margin: 0;
+}
+/* .note közvetlen a legend után*/
+legend + .note{
+    display: block;
+    margin-top: -1em;
+}

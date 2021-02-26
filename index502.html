@@ -57,6 +57,50 @@
             </tr>
         </tfoot>
     </table>
+
+    <br>
+    <!--Sima szöveg küldéséhez enctype : application/x-www-form-urlencoded 
+    fájlokhoz multipart/form-data
+    autocomplete: engedélyezni a már beírt adatok kiegészítését, lehet form szintű vagy input szintű-->
+    <form method="GET" autocomplete="on" action="http://localhost:8081" enctype="application/x-www-form-urlencoded">
+        <!-- A szerver felé küldéshez az inputnak kell egy name attribútum, a beírt érték lesz a value-->
+        <input name="alma" type="text" id="alma" value="gyümölcs">
+        <input name="alma" autocomplete="off" type="text" id="barack">
+        <!-- multiple lehet egyedülálló vagy az éréke a neve, több fájl feltöltéséhez -->
+        <input name="fajlok" multiple="multiple" type="file">
+        <input type="checkbox" name="pipainput" value="valami">
+        <input type="radio" name="valasztas" value="a1">
+        <input type="radio" name="valasztas" value="a2">
+        <input type="radio" name="valasztas" value="a3">
+        <!--Szín választó-->
+        <input type="color" name="szín">
+        <button>OK</button>
+        <!-- Ha a formban van button elem, specifikáció nélkül, akkor az
+        submitnak minősül-->
+        <button type="reset">Alapértelmezett</button>
+    </form>
+    <!-- Értelmesebben szervezett rész-->
+    <form method="POST" autocomplete="on" action="http://localhost:8081" enctype="application/x-www-form-urlencoded">
+        <fieldset>
+            <legend>Jelentkezési adatok</legend>
+            <div class="note">Mégsem ön ...</div>
+            <div>
+                <label>Nevem</label><input name="nev" type="text">
+            </div>
+            <div>
+                <label>Telefon</label><input name="telefon" type="text">
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>Számlázási cím</legend>
+            <div>
+                <label>Cégnév</label><input name="ceg" type="text">
+            </div>
+            <div> 
+                <label>Város</label><input name="varos" type="text">
+            </div>
+        </fieldset>
+    </form>
 </body>
 
 </html>
