@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <!-- A vászon /canvas/ gyakorlása-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vászon</title>
+    <style>
+        canvas{
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <canvas width="800" height="800" id="vaszon">
+        [Neked nincs jó böngésződ] <!-- Csak akkor jelenik meg, ha a böngésző nem ismeri az elemet-->
+    </canvas>
+    <script>
+        // elem elérése getElementById-vel
+        var papir = document.getElementById("vaszon");
+        // context rész a programozható felület
+        var context = papir.getContext("2d");
+        context.moveTo(50,50);
+        context.lineTo(100,100);
+        context.lineWidth = 5;
+        context.strokeStyle = "yellow";
+        // az elem kirajzolása
+        context.stroke();
+        // a következőnek rajzolt rész elvállik az előzőtől
+        context.beginPath();
+        context.moveTo(125,75);
+        context.lineTo(150,50);
+        context.strokeStyle = "orange";
+        context.stroke();
+    </script>
+</body>
+</html>
