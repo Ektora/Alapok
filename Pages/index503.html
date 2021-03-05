@@ -20,18 +20,86 @@
         var papir = document.getElementById("vaszon");
         // context rész a programozható felület
         var context = papir.getContext("2d");
-        context.moveTo(50,50);
+        
+	
+	context.moveTo(50,50);
         context.lineTo(100,100);
+
         context.lineWidth = 5;
         context.strokeStyle = "yellow";
         // az elem kirajzolása
         context.stroke();
+
         // a következőnek rajzolt rész elvállik az előzőtől
         context.beginPath();
+
         context.moveTo(125,75);
         context.lineTo(150,50);
+	context.lineTo(200,100);
+
+	context.lineWidth = 20;
         context.strokeStyle = "orange";
         context.stroke();
+
+	context.lineTo(150,100);
+	
+	context.lineWidth = 10;
+	context.strokeStyle = "brown";
+
+	context.lineCap = "square";
+	
+	context.lineJoin = "round";
+	context.closePath();
+
+	context.stroke();
+	
+	// Kör rajzolása
+	context.beginPath();
+	context.arc(300,300,100,0,Math.PI*2);
+	context.stroke();
+
+	// Változó sugarú körök
+	context.beginPath();
+	var legnagyobbSugar = 400;
+	var legkisebbSugar = 18;
+	var lepesek = 10;
+	var minTavolsag = 2;
+	
+	var r1 = 235, g1 = 250, b1 = 255;
+	var dr = -70; //Math.floor((r2-r1)/steps);
+	var dg = -40; //Math.floor((g2-g1)/steps);
+	var db = -21; //Math.floor((b2-b1)/steps);
+
+
+	var sugarLepes = (legnagyobbSugar - legkisebbSugar) / lepesek;
+	var xOffset = (sugarLepes - minTavolsag) / lepesek;
+
+	var kezdoSugar = legnagyobbSugar - sugarLepes / 2;
+	context.lineWidth = 2;
+	//context.strokeStyle = "red";
+	//kitöltés színe
+	context.fillStyle ="rgb(220,220,220)";
+	//egyből téglalapot színez
+	context.fillRect(0,0,papir.width/2,papir.height);
+	context.fillStyle ="black";
+	context.fillRect(papir.width/2,0,papir.width/2,papir.height);
+
+
+	for(var i = 0; i<lepesek; i++){
+	context.beginPath();
+	var gray = Math.round(i*255/lepesek); // kerekítés
+	
+
+	context.fillStyle = "rgb(" + (r1+i*dr) + "," + (g1+i*dg) + "," + (b1+i*db) + ")";
+	context.arc(legnagyobbSugar,legnagyobbSugar,legnagyobbSugar-i*sugarLepes,0,2*Math.PI);
+	context.fill();
+
+	context.beginPath();
+	context.fillStyle = "rgb("+ gray + "," + gray + "," + gray +")";
+	context.arc(kezdoSugar + minTavolsag + i*xOffset,legnagyobbSugar,kezdoSugar-i*sugarLepes,0,2*Math.PI);
+	//context.stroke();
+	context.fill();
+	}
     </script>
 </body>
 </html>
