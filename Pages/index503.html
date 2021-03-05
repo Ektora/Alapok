@@ -100,6 +100,32 @@
 	//context.stroke();
 	context.fill();
 	}
+
+	context.clearRect(0,0,papir.width,papir.height);
+	context.beginPath();
+	context.moveTo(100,100);
+
+	context.lineTo(100,200);
+	//körív rajzolás
+	context.arcTo(100,250,200,100,20);
+	context.stroke();
+
+	context.moveTo(300,200);
+	context.quadraticCurveTo(450,150,600,200);
+	context.stroke();
+
+	context.moveTo(500,100);
+	context.bezierCurveTo(550, 10, 700, 400, 800, 100);
+	context.stroke();
+
+
+	
+	
     </script>
+//Húzgálhatós görbe
+	<p>
+	<input type="checkbox" onchange="drawAll()" id="chkFill" /><label for="chkFill">kiszínezés</label>
+	<input type="checkbox" onchange="drawAll()" id="chkCtrl" /><label for="chkCtrl">kontrolpontok</label>
+	</p>
 </body>
 </html>
