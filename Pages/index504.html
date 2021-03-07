@@ -10,8 +10,20 @@
             border: 1px solid black;
         }
     </style>
+	<!-- Adatkötéshez js file -->
+	<script type='text/javascript' src='../JS/knockout.js'></script>
 </head>
 <body>
+	<p>
+	<input data-bind="value: meret">
+	<br>
+	<input data-bind="value: szin">
+	<br>
+	<input data-bind="value: meret">
+	<br>
+	<input data-bind="value: szin">
+
+	</p>
 	<canvas width="800" height="800" id="vaszon">
         [Neked nincs jó böngésződ] <!-- Csak akkor jelenik meg, ha a böngésző nem ismeri az elemet-->
     	</canvas>
@@ -41,7 +53,7 @@
 		ctx.beginPath();
 		ctx.arc(150,150,50,0,2*Math.PI);
 		ctx.stroke();
-		*/
+		
 
 		var canvas = document.getElementById("vaszon");
 		var ctx = canvas.getContext("2d");
@@ -92,6 +104,30 @@
 		ctx.rotate(Math.PI/12);
 		ctx.scale(0.93,0.93);
 		}
+		*/
+
+		// Canvas főleg grafikonok készítésére alkalmas
+
+		var canvas = document.getElementById("vaszon");
+		var ctx = canvas.getContext("2d");
+		/* //Sima js konstruktor
+		function adat(meret,szin,nev){
+			//ha this van benne nem funkció, hanem konstruktor
+			this.meret = meret;
+			this.szin = szin;
+			this.nev = nev;
+		}
+		*/
+		function adat(meret,szin,nev){
+			//a méretből új obj-ot csinál, és azt teszi a méretbe. 
+			this.meret = ko.observable(meret);
+			this.szin = szin;
+			this.nev = nev;
+		}
+		// objektum megadása
+		var cucc = new adat(15,"red","mari");
+		//ko = knockout
+		ko.applyBindings(cucc);
 	</script>
 </body>
 </html>
