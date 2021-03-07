@@ -16,6 +16,8 @@
         [Neked nincs jó böngésződ] <!-- Csak akkor jelenik meg, ha a böngésző nem ismeri az elemet-->
     	</canvas>
 	<script>
+		/*
+		// Transzformációs függvények canvason
 		var papir = document.getElementById("vaszon");
 		var ctx = papir.getContext("2d");
 		//elmenti a context állapotát
@@ -39,6 +41,57 @@
 		ctx.beginPath();
 		ctx.arc(150,150,50,0,2*Math.PI);
 		ctx.stroke();
+		*/
+
+		var canvas = document.getElementById("vaszon");
+		var ctx = canvas.getContext("2d");
+
+		var baseColors = [];
+		baseColors[0] = {r:166,g:172,b:255,dr:-33,dg:-30,db:-34};
+		baseColors[1] = {r:60,g:177,b:184,dr:-28,dg:-33,db:-32};
+		var colorSteps = 6;
+		var colors = [];
+		
+		for(var i=0;i<colorSteps;i++){
+			for(var x=0;x<baseColors.length;x++){
+			var offset = x%baseColors.length;
+			colors[i*baseColors.length+offset]="rgb(" + baseColors[offset].r + ","+ baseColors[offset].g + ","+ baseColors[offset].b + ")";
+			baseColors[offset].r+=baseColors[offset].dr;
+			baseColors[offset].g+=baseColors[offset].dg;
+			baseColors[offset].b+=baseColors[offset].db;
+			}
+		}
+
+		//színátmenet
+		var backGrad = ctx.createLinearGradient(0,0,0,800);
+		backGrad.addColorStop(0,"#eaeaea");
+		backGrad.addColorStop(0.5,"#dbdbdb");
+		backGrad.addColorStop(1,"#acacac");
+		ctx.fillStyle = backGrad;
+		ctx.fillRect(0,0,800,800);
+		ctx.translate(400,400);
+
+		var y=0;
+		var dy =1;
+		ctx.lineWidth =1;
+		for(var x=0;x<45;x++){
+		ctx.beginPath();
+		for(var i=0;i<8;i++){
+			ctx.rotate(Math.PI/4);
+			ctx.lineTo(350,0);
+			}
+		ctx.closePath();
+		ctx.fillStyle=colors[y];		
+		y+=dy;
+		if(y==colors.length-1) dy=-1;
+		if(y==0) dy=1;
+		
+		ctx.fill();
+		ctx.lineWidth/=0.95;
+		ctx.stroke();
+		ctx.rotate(Math.PI/12);
+		ctx.scale(0.93,0.93);
+		}
 	</script>
 </body>
 </html>
