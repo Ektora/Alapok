@@ -14,6 +14,7 @@
 	<script type='text/javascript' src='../JS/knockout.js'></script>
 </head>
 <body>
+	<!--
 	<p>
 	<input data-bind="value: meret">
 	<br>
@@ -22,8 +23,21 @@
 	<input data-bind="value: meret">
 	<br>
 	<input data-bind="value: szin">
-
 	</p>
+	-->
+	<p>
+		<label>név : <input id="nev"></label><br>
+		<label>méret : <input id="meret"></label><br>
+		<label>szín : <input id="szin"></label><br>
+		<button onclick="addneki()">Add</button>
+	</p>
+	<table data-bind="foreach: adatok">
+	<tr>
+		<td data-bind="text:nev"></td>
+		<td><input data-bind="value:meret"></td>
+		<td data-bind="text:szin"></td>
+	<tr>
+	</table>
 	<canvas width="800" height="800" id="vaszon">
         [Neked nincs jó böngésződ] <!-- Csak akkor jelenik meg, ha a böngésző nem ismeri az elemet-->
     	</canvas>
@@ -125,9 +139,28 @@
 			this.nev = nev;
 		}
 		// objektum megadása
-		var cucc = new adat(15,"red","mari");
+
+		function lista(){
+			this.adatok = ko.observableArray([
+			new adat(14,"red","mari"),
+			new adat(24,"green","jani")
+			]);
+		}
+
+		var cucc = new lista();
 		//ko = knockout
 		ko.applyBindings(cucc);
+
+		function addneki(){
+			var strNev = document.getElementById("nev").value;
+			var strSzin = document.getElementById("szin").value;
+			//Típuskényszerítés
+			var numMeret = Number(document.getElementById("meret").value);
+
+			var ujAdat = new adat(numMeret,strSzin,strNev);
+			
+			cucc.adatok.push(ujAdat);
+		}
 	</script>
 </body>
 </html>
