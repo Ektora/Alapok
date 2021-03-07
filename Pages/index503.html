@@ -118,14 +118,128 @@
 	context.bezierCurveTo(550, 10, 700, 400, 800, 100);
 	context.stroke();
 
-
-	
+	// canvas elrejtése
+	papir.style.display="none";
 	
     </script>
 //Húzgálhatós görbe
+	<br>
+	<canvas width="800" height="800" id="vaszon2" onmousedown="GetPoint(event)" onmouseup="GotPoint(event)" onmousemove="MovePoint(event)">
+	</canvas>
 	<p>
 	<input type="checkbox" onchange="drawAll()" id="chkFill" /><label for="chkFill">kiszínezés</label>
-	<input type="checkbox" onchange="drawAll()" id="chkCtrl" /><label for="chkCtrl">kontrolpontok</label>
+	<input type="checkbox" onchange="drawAll()" id="chkCtrl" checked /><label for="chkCtrl">kontrolpontok</label>
 	</p>
+	
+	<script>
+	var canvas = document.getElementById("vaszon2");
+	var ctx = canvas.getContext("2d");
+	var fillChk = document.getElementById("chkFill");
+	var fillCtrl = document.getElementById("chkCtrl");
+	
+	var points = [];
+	var index = 0;
+	var isMouseDown = false;
+	//var prevPoint = {x: -100, y: -100};
+
+	//mousedown
+	function GetPoint(event){
+		isMouseDown=true;
+		var x,y;
+		//ha nem létezik ilyen tulajdonság(firefox) akkor csinálja az else ágat
+		if(event.offsetX){
+			x=event.offsetX; //amin kattintottam, annak a bal felső sarkától milyen távol vagyok
+			y=event.offsetY;
+			}
+		else{
+			x=event.pageX-canvas.offsetLeft; //a lap bal oldalától hol vagyok - canvas hol van a lap oldalától
+			y=event.pageY-canvas.offsetTop;
+			}
+		// ha új lap 0
+		index=points.length;
+
+		//régit keresünk
+		for(var i=0;i<points.length;i++){
+			var a = points[i].x-x;
+			var b = points[i].y-y;
+			a = a*a;
+			b = b*b;
+			if(a+b<25){//5-ös sugarú körnél kisebb
+			index=i;
+			break;
+			}
+		}
+		points[index]={x:x,y:y};
+		drawAll();
+			
+	}
+
+	function GotPoint(event){
+		isMouseDown=false;
+		var x,y;
+		//ha nem létezik ilyen tulajdonság(firefox) akkor csinálja az else ágat
+		if(event.offsetX){
+			x=event.offsetX; //amin kattintottam, annak a bal felső sarkától milyen távol vagyok
+			y=event.offsetY;
+			}
+		else{
+			x=event.pageX-canvas.offsetLeft; //a lap bal oldalától hol vagyok - canvas hol van a lap oldalától
+			y=event.pageY-canvas.offsetTop;
+			}
+		points[index]={x:x,y:y};
+		drawAll();
+	}
+	
+	function MovePoint(event){
+		if(!isMouseDown)
+			return;
+		var x,y;
+		//ha nem létezik ilyen tulajdonság(firefox) akkor csinálja az else ágat
+		if(event.offsetX){
+			x=event.offsetX; //amin kattintottam, annak a bal felső sarkától milyen távol vagyok
+			y=event.offsetY;
+			}
+		else{
+			x=event.pageX-canvas.offsetLeft; //a lap bal oldalától hol vagyok - canvas hol van a lap oldalától
+			y=event.pageY-canvas.offsetTop;
+			}
+		points[index]={x:x,y:y};
+		drawAll();
+	}
+	function drawAll(){
+		canvas.width=canvas.width;
+	
+	//controlpontok
+	if(chkCtrl.checked==true){
+		for(var i=0;i<points.length;i++){
+			ctx.beginPath();
+			ctx.strokeStyle="gray";
+			ctx.arc(points[i].x, points[i].y,4,0,2*Math.PI);
+			ctx.stroke();
+			
+		if(i>0){
+			var pos = i%3;
+			if(pos==2) continue;
+			ctx.beginPath();
+			ctx.strokeStyle="silver";
+			ctx.moveTo(points[i-1].x, points[i-1].y);
+			ctx.lineTo(points[i].x, points[i].y);
+			ctx.stroke();
+			}
+		}
+		}
+		
+	//rajz
+		ctx.beginPath();
+		ctx.moveTo(points[0].x,points[0].y);
+		for(i=3; i<points.length;i+=3){
+			ctx.strokeStyle="red";
+			ctx.bezierCurveTo(points[i-2].x,points[i-2].y,points[i-1].x,points[i-1].y,points[i].x,points[i].y);
+		}
+		if(chkFill.checked==true) ctx.fill();
+		ctx.stroke();
+		
+	}
+	</script>
 </body>
 </html>
