@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <!-- A vászon /canvas/ gyakorlása-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vászon</title>
+    <style>
+        canvas{
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+	<canvas width="800" height="800" id="vaszon">
+        [Neked nincs jó böngésződ] <!-- Csak akkor jelenik meg, ha a böngésző nem ismeri az elemet-->
+    	</canvas>
+	<script>
+		var papir = document.getElementById("vaszon");
+		var ctx = papir.getContext("2d");
+		//elmenti a context állapotát
+		ctx.save();
+		//eltolás
+		//ctx.translate(100,0);
+		//forgatás
+		//ctx.rotate(1);
+		//transzformálás
+		//ctx.scale(1,0.5);
+
+		ctx.transform(1, 2, 1, 0.5, 100,0); // y-ra felezés, 100-al eltolás x-en, 2 radiállal elnyújtva, 1-el elfordítva
+		//   1  1  0
+		//   0 0.5 0
+		// 100  0  1
+		ctx.lineWidth=10;
+		ctx.arc(100,100,100,0,2*Math.PI);
+		ctx.stroke();
+		// visszaállítja a save állapotát
+		ctx.restore();
+		ctx.beginPath();
+		ctx.arc(150,150,50,0,2*Math.PI);
+		ctx.stroke();
+	</script>
+</body>
+</html>
