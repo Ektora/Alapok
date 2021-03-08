@@ -20,39 +20,227 @@
         var papir = document.getElementById("vaszon");
         // context rész a programozható felület
         var context = papir.getContext("2d");
-        context.moveTo(50,50);
+        
+	
+	context.moveTo(50,50);
         context.lineTo(100,100);
-        context.lineWidth = 30;
+
+    context.lineWidth = 30;
         context.strokeStyle = "yellow";
         // az elem kirajzolása
         context.stroke();
+
         // a következőnek rajzolt rész elvállik az előzőtől
         context.beginPath();
 
-        
         context.moveTo(125,75);
         context.lineTo(150,50);
-        context.lineTo(200,100);
-        
-        
+	context.lineTo(200,100);
 
-        context.lineWidth = 20;
-        context.strokeStyle = "orange";
+	context.lineWidth = 20;
+        context.strokeStyle = "orange";// a vonal színe
         context.stroke();
-        
-        context.lineTo(150,100);
 
-        context.lineWidth = 10;
-        // a vonal színe
-        context.strokeStyle = "brown";
-        // a vonal vége lekerekedik round:kerek, butt:vonal square:félnégyzet
-        context.lineCap = "round";
-        // töréspontok alakja miter:hegyes bevel:lecsípi a hegyét round:kerek
-        context.lineJoin = "round";
-        // befejezi az alakzatot zárt alakzatra, és a pathet lezárja, a kurzor áthelyeződik a vonal végére
+	context.lineTo(150,100);
+	
+	context.lineWidth = 10;
+	context.strokeStyle = "brown";
+
+	context.lineCap = "square";// a vonal vége lekerekedik round:kerek, butt:vonal square:félnégyzet
+	
+	context.lineJoin = "round";// töréspontok alakja miter:hegyes bevel:lecsípi a hegyét round:kerek
+	// befejezi az alakzatot zárt alakzatra, és a pathet lezárja, a kurzor áthelyeződik a vonal végére
         //context.closePath();
-        context.stroke();
 
+	context.stroke();
+	
+	// Kör rajzolása
+	context.beginPath();
+	context.arc(300,300,100,0,Math.PI*2);
+	context.stroke();
+
+	// Változó sugarú körök
+	context.beginPath();
+	var legnagyobbSugar = 400;
+	var legkisebbSugar = 18;
+	var lepesek = 10;
+	var minTavolsag = 2;
+	
+	var r1 = 235, g1 = 250, b1 = 255;
+	var dr = -70; //Math.floor((r2-r1)/steps);
+	var dg = -40; //Math.floor((g2-g1)/steps);
+	var db = -21; //Math.floor((b2-b1)/steps);
+
+
+	var sugarLepes = (legnagyobbSugar - legkisebbSugar) / lepesek;
+	var xOffset = (sugarLepes - minTavolsag) / lepesek;
+
+	var kezdoSugar = legnagyobbSugar - sugarLepes / 2;
+	context.lineWidth = 2;
+	//context.strokeStyle = "red";
+	//kitöltés színe
+	context.fillStyle ="rgb(220,220,220)";
+	//egyből téglalapot színez
+	context.fillRect(0,0,papir.width/2,papir.height);
+	context.fillStyle ="black";
+	context.fillRect(papir.width/2,0,papir.width/2,papir.height);
+
+
+	for(var i = 0; i<lepesek; i++){
+	context.beginPath();
+	var gray = Math.round(i*255/lepesek); // kerekítés
+	
+
+	context.fillStyle = "rgb(" + (r1+i*dr) + "," + (g1+i*dg) + "," + (b1+i*db) + ")";
+	context.arc(legnagyobbSugar,legnagyobbSugar,legnagyobbSugar-i*sugarLepes,0,2*Math.PI);
+	context.fill();
+
+	context.beginPath();
+	context.fillStyle = "rgb("+ gray + "," + gray + "," + gray +")";
+	context.arc(kezdoSugar + minTavolsag + i*xOffset,legnagyobbSugar,kezdoSugar-i*sugarLepes,0,2*Math.PI);
+	//context.stroke();
+	context.fill();
+	}
+
+	context.clearRect(0,0,papir.width,papir.height);
+	context.beginPath();
+	context.moveTo(100,100);
+
+	context.lineTo(100,200);
+	//körív rajzolás
+	context.arcTo(100,250,200,100,20);
+	context.stroke();
+
+	context.moveTo(300,200);
+	context.quadraticCurveTo(450,150,600,200);
+	context.stroke();
+
+	context.moveTo(500,100);
+	context.bezierCurveTo(550, 10, 700, 400, 800, 100);
+	context.stroke();
+
+	// canvas elrejtése
+	papir.style.display="none";
+	
     </script>
+//Húzgálhatós görbe
+	<br>
+	<canvas width="800" height="800" id="vaszon2" onmousedown="GetPoint(event)" onmouseup="GotPoint(event)" onmousemove="MovePoint(event)">
+	</canvas>
+	<p>
+	<input type="checkbox" onchange="drawAll()" id="chkFill" /><label for="chkFill">kiszínezés</label>
+	<input type="checkbox" onchange="drawAll()" id="chkCtrl" checked /><label for="chkCtrl">kontrolpontok</label>
+	</p>
+	
+	<script>
+	var canvas = document.getElementById("vaszon2");
+	var ctx = canvas.getContext("2d");
+	var fillChk = document.getElementById("chkFill");
+	var fillCtrl = document.getElementById("chkCtrl");
+	
+	var points = [];
+	var index = 0;
+	var isMouseDown = false;
+	//var prevPoint = {x: -100, y: -100};
+
+	//mousedown
+	function GetPoint(event){
+		isMouseDown=true;
+		var x,y;
+		//ha nem létezik ilyen tulajdonság(firefox) akkor csinálja az else ágat
+		if(event.offsetX){
+			x=event.offsetX; //amin kattintottam, annak a bal felső sarkától milyen távol vagyok
+			y=event.offsetY;
+			}
+		else{
+			x=event.pageX-canvas.offsetLeft; //a lap bal oldalától hol vagyok - canvas hol van a lap oldalától
+			y=event.pageY-canvas.offsetTop;
+			}
+		// ha új lap 0
+		index=points.length;
+
+		//régit keresünk
+		for(var i=0;i<points.length;i++){
+			var a = points[i].x-x;
+			var b = points[i].y-y;
+			a = a*a;
+			b = b*b;
+			if(a+b<25){//5-ös sugarú körnél kisebb
+			index=i;
+			break;
+			}
+		}
+		points[index]={x:x,y:y};
+		drawAll();
+			
+	}
+
+	function GotPoint(event){
+		isMouseDown=false;
+		var x,y;
+		//ha nem létezik ilyen tulajdonság(firefox) akkor csinálja az else ágat
+		if(event.offsetX){
+			x=event.offsetX; //amin kattintottam, annak a bal felső sarkától milyen távol vagyok
+			y=event.offsetY;
+			}
+		else{
+			x=event.pageX-canvas.offsetLeft; //a lap bal oldalától hol vagyok - canvas hol van a lap oldalától
+			y=event.pageY-canvas.offsetTop;
+			}
+		points[index]={x:x,y:y};
+		drawAll();
+	}
+	
+	function MovePoint(event){
+		if(!isMouseDown)
+			return;
+		var x,y;
+		//ha nem létezik ilyen tulajdonság(firefox) akkor csinálja az else ágat
+		if(event.offsetX){
+			x=event.offsetX; //amin kattintottam, annak a bal felső sarkától milyen távol vagyok
+			y=event.offsetY;
+			}
+		else{
+			x=event.pageX-canvas.offsetLeft; //a lap bal oldalától hol vagyok - canvas hol van a lap oldalától
+			y=event.pageY-canvas.offsetTop;
+			}
+		points[index]={x:x,y:y};
+		drawAll();
+	}
+	function drawAll(){
+		canvas.width=canvas.width;
+	
+	//controlpontok
+	if(chkCtrl.checked==true){
+		for(var i=0;i<points.length;i++){
+			ctx.beginPath();
+			ctx.strokeStyle="gray";
+			ctx.arc(points[i].x, points[i].y,4,0,2*Math.PI);
+			ctx.stroke();
+			
+		if(i>0){
+			var pos = i%3;
+			if(pos==2) continue;
+			ctx.beginPath();
+			ctx.strokeStyle="silver";
+			ctx.moveTo(points[i-1].x, points[i-1].y);
+			ctx.lineTo(points[i].x, points[i].y);
+			ctx.stroke();
+			}
+		}
+		}
+		
+	//rajz
+		ctx.beginPath();
+		ctx.moveTo(points[0].x,points[0].y);
+		for(i=3; i<points.length;i+=3){
+			ctx.strokeStyle="red";
+			ctx.bezierCurveTo(points[i-2].x,points[i-2].y,points[i-1].x,points[i-1].y,points[i].x,points[i].y);
+		}
+		if(chkFill.checked==true) ctx.fill();
+		ctx.stroke();
+		
+	}
+	</script>
 </body>
 </html>
