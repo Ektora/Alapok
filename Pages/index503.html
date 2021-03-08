@@ -22,16 +22,37 @@
         var context = papir.getContext("2d");
         context.moveTo(50,50);
         context.lineTo(100,100);
-        context.lineWidth = 5;
+        context.lineWidth = 30;
         context.strokeStyle = "yellow";
         // az elem kirajzolása
         context.stroke();
         // a következőnek rajzolt rész elvállik az előzőtől
         context.beginPath();
+
+        
         context.moveTo(125,75);
         context.lineTo(150,50);
+        context.lineTo(200,100);
+        
+        
+
+        context.lineWidth = 20;
         context.strokeStyle = "orange";
         context.stroke();
+        
+        context.lineTo(150,100);
+
+        context.lineWidth = 10;
+        // a vonal színe
+        context.strokeStyle = "brown";
+        // a vonal vége lekerekedik round:kerek, butt:vonal square:félnégyzet
+        context.lineCap = "round";
+        // töréspontok alakja miter:hegyes bevel:lecsípi a hegyét round:kerek
+        context.lineJoin = "round";
+        // befejezi az alakzatot zárt alakzatra, és a pathet lezárja, a kurzor áthelyeződik a vonal végére
+        //context.closePath();
+        context.stroke();
+
     </script>
 </body>
 </html>
