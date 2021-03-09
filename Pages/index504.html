@@ -12,6 +12,11 @@
     </style>
 	<!-- Adatkötéshez js file -->
 	<script type='text/javascript' src='../JS/knockout.js'></script>
+	<script type="text/javascript" src="../JS/Rgraph/RGraph.common.core.js"></script>
+	<script type="text/javascript" src="../JS/Rgraph/RGraph.common.dynamic.js"></script>
+	<script type="text/javascript" src="../JS/Rgraph/RGraph.common.effects.js"></script>
+	<script type="text/javascript" src="../JS/Rgraph/RGraph.common.key.js"></script>
+	<script type="text/javascript" src="../JS/Rgraph/RGraph.pie.js"></script>
 </head>
 <body>
 	<!--
@@ -180,10 +185,22 @@
 		}
 		//grafikon rajzolás
 		function drawChart(){
+
 			canvas.width=canvas.width;
+			drawPie();
 			var cellWidth = canvas.width/cucc.adatok().length;
 			var offset = cellWidth/2;
+			
+			
+			
 			ctx.save();
+
+			// A diagrampöttyök árnyékolása
+			ctx.shadowColor="rgba(0,0,0,0.5)";
+			ctx.shadowBlur=2;
+			ctx.shadowOffsetX=2;
+			ctx.shadowOffsetY=2;
+
 			ctx.translate(0,canvas.height);
 			ctx.scale(1,-1);
 			for(var i=0;i<cucc.adatok().length;i++){
@@ -203,6 +220,39 @@
 			}
 			ctx.stroke();
 			ctx.restore();
+		}
+
+		//Tortadiagram készítése
+		function drawPie(){
+			var cx= canvas.width/2;
+			var cy=canvas.width/2;
+			var r=cx;
+			var total=0;
+
+			for(var i=0;i<cucc.adatok().length;i++){
+				total+=Number(cucc.adatok()[i].meret());
+			}
+			var pos=0;
+			for(var i=0;i<cucc.adatok().length;i++){
+				var szelet=cucc.adatok()[i].meret()/total;
+				szelet=Math.PI*2*szelet;
+				ctx.beginPath();
+				ctx.moveTo(cx,cy);
+				ctx.arc(cx,cy,r,pos,pos+szelet);
+				ctx.closePath();
+
+				ctx.fillStyle=cucc.adatok()[i].szin;
+				ctx.fill();
+				ctx.stroke();
+				pos+=szelet;
+			}
+
+			// Diagram feliratok
+			ctx.font = "bold 14px Arial";
+			ctx.textAlign="left";
+			ctx.textBaseline="top";
+			ctx.fillText("Felirat a köbön",100,100);
+			ctx.strokeText("Felirat a köbön",100,100);
 		}
 	</script>
 </body>
