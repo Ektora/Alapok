@@ -150,6 +150,7 @@
 		var cucc = new lista();
 		//ko = knockout
 		ko.applyBindings(cucc);
+		drawChart();		
 
 		function addneki(){
 			var strNev = document.getElementById("nev").value;
@@ -160,6 +161,33 @@
 			var ujAdat = new adat(numMeret,strSzin,strNev);
 			
 			cucc.adatok.push(ujAdat);
+			drawChart();
+		}
+		//grafikon rajzolás
+		function drawChart(){
+			canvas.width=canvas.width;
+			var cellWidth = canvas.width/cucc.adatok().length;
+			var offset = cellWidth/2;
+			ctx.save();
+			ctx.translate(0,canvas.height);
+			ctx.scale(1,-1);
+			for(var i=0;i<cucc.adatok().length;i++){
+				ctx.beginPath();
+				ctx.fillStyle=cucc.adatok()[i].szin;
+				var x=cellWidth*i+offset;
+				var y=cucc.adatok()[i].meret();
+				ctx.arc(x,y,5,0,2*Math.PI);
+				ctx.fill();
+				ctx.stroke();
+			}
+			ctx.beginPath();
+			for(var i=0;i<cucc.adatok().length;i++){
+				var x=cellWidth*i+offset;
+				var y=cucc.adatok()[i].meret();
+				ctx.lineTo(x,y);
+			}
+			ctx.stroke();
+			ctx.restore();
 		}
 	</script>
 </body>
