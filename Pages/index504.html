@@ -132,9 +132,22 @@
 			this.nev = nev;
 		}
 		*/
+		var canvas = document.getElementById("vaszon");
+		var ctx = canvas.getContext("2d");
+
+		// a már beírt adatok változtatásának figyelése
+		ko.extenders.valtozas=function(target,options){
+			target.subscribe(
+				function(ujErtek){
+					drawChart();
+				}
+			);
+			return target;
+		}
+
 		function adat(meret,szin,nev){
 			//a méretből új obj-ot csinál, és azt teszi a méretbe. 
-			this.meret = ko.observable(meret);
+			this.meret = ko.observable(meret).extend({valtozas: "ez az optionba megy"});
 			this.szin = szin;
 			this.nev = nev;
 		}
@@ -150,7 +163,9 @@
 		var cucc = new lista();
 		//ko = knockout
 		ko.applyBindings(cucc);
-		drawChart();		
+		drawChart();	
+		
+		
 
 		function addneki(){
 			var strNev = document.getElementById("nev").value;
